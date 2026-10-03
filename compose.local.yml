@@ -1,0 +1,53 @@
+# Lokale Testumgebung ohne Traefik/Portainer.
+# Start: docker compose -f compose.local.yml up -d --build
+# App danach unter http://localhost:3000 erreichbar.
+# Nicht fuer den Schulbetrieb gedacht (kein TLS, keine Backups, keine Ressourcenlimits).
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: schulschach-app:local
+    container_name: schulschach_app
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://schulschach:${POSTGRES_PASSWORD}@db:5432/schulschach?schema=public
+      NEXT_TELEMETRY_DISABLED: "1"
+      # Test-Schueler werden beim Seed angelegt und ihre Codes einmalig im Log gezeigt (nur lokal!).
+      SEED_SHOW_TEST_CODES: "1"
+    ports:
+      - "3000:3000"
+    networks:
+      - schulschach_local
+
+  db:
+    image: postgres:16-alpine
+    container_name: schulschach_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: schulschach
+      POSTGRES_USER: schulschach
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - schulschach_postgres_local:/var/lib/postgresql/data
+    networks:
+      - schulschach_local
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U schulschach -d schulschach"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+networks:
+  schulschach_local:
+
+volumes:
+  schulschach_postgres_local:

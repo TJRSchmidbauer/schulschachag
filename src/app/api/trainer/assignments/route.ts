@@ -53,6 +53,6 @@ export async function POST(req: Request) {
       targets: targetAll ? undefined : { create: studentIds.map((userId) => ({ userId })) },
     },
   });
-  console.log(`[audit] Hausaufgabe angelegt: ${created.title}`);
+  console.log('[audit] Hausaufgabe angelegt');
   return NextResponse.json({ id: created.id });
 }

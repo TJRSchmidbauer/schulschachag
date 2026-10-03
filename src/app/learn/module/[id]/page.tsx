@@ -10,9 +10,21 @@ export default async function ModulePage({ params }: { params: Promise<{ id: str
 
   const mod = await db.module.findUnique({
     where: { id },
-    include: { modulePuzzles: { orderBy: { sortOrder: 'asc' }, include: { puzzle: true } } },
+    include: {
+      learningPath: { select: { id: true, active: true } },
+      modulePuzzles: { orderBy: { sortOrder: 'asc' }, include: { puzzle: true } },
+    },
   });
-  if (!mod) notFound();
+  if (!mod || !mod.active || !mod.learningPath.active) notFound();
+
+  // Serverseitige Gruppenprüfung: Hat die Gruppe des Schülers Lernpfade zugeordnet,
+  // sind nur Module aus diesen Pfaden erreichbar.
+  const me = await db.user.findUnique({
+    where: { id: session.userId },
+    select: { group: { select: { paths: { select: { pathId: true } } } } },
+  });
+  const allowedPathIds = me?.group?.paths.map((p) => p.pathId) ?? [];
+  if (allowedPathIds.length > 0 && !allowedPathIds.includes(mod.learningPathId)) notFound();
 
   const attempts = await db.attempt.findMany({ where: { userId: session.userId } });
 

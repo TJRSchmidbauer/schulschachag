@@ -12,8 +12,8 @@ export const getSettings = cache(async (): Promise<Settings> => {
     if (!row) return DEFAULT_SETTINGS;
     const parsed = sanitizeSettings(JSON.parse(row.value));
     return parsed.ok ? parsed.value : DEFAULT_SETTINGS;
-  } catch (err) {
-    console.warn('[einstellungen] Standardwerte werden benutzt:', err instanceof Error ? err.message : err);
+  } catch {
+    console.warn('[einstellungen] Standardwerte werden benutzt (Datenbank nicht erreichbar oder leer)');
     return DEFAULT_SETTINGS;
   }
 });

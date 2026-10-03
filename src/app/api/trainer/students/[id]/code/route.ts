@@ -14,7 +14,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   if (action === 'reveal') {
     const code = student.codeEnc ? decryptCode(student.codeEnc) : null;
     if (!code) return NextResponse.json({ error: 'no_code' }, { status: 404 });
-    console.log(`[audit] Code angezeigt: ${student.alias}`);
+    console.log('[audit] Code angezeigt');
     return NextResponse.json({ code });
   }
 
@@ -27,7 +27,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       }),
       db.session.deleteMany({ where: { userId: id } }),
     ]);
-    console.log(`[audit] Code neu ausgestellt: ${student.alias}`);
+    console.log('[audit] Code neu ausgestellt');
     return NextResponse.json({ code });
   }
 

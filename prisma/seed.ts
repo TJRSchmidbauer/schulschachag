@@ -81,25 +81,32 @@ async function main() {
   }
   console.log('[seed] Lernpfad Startklar mit 4 Modulen bereit.');
 
-  const aliases = ['Springer-01', 'Turm-Leo', 'Bauer-Mia'];
-  console.log('\n=== Test-Schüler (Codes werden nur hier einmalig angezeigt) ===');
-  for (const alias of aliases) {
-    const existing = await db.user.findUnique({ where: { alias } });
-    if (existing) {
-      console.log(`- ${alias}: bereits vorhanden (Code unverändert, nicht mehr abrufbar)`);
-      continue;
+  // Test-Schüler nur außerhalb des Produktivbetriebs anlegen, damit keine
+  // Zugangscodes in produktiven Container-Logs landen.
+  const showTestCodes = process.env.SEED_SHOW_TEST_CODES === '1' || process.env.NODE_ENV !== 'production';
+  if (showTestCodes) {
+    const aliases = ['Springer-01', 'Turm-Leo', 'Bauer-Mia'];
+    console.log('\n=== Test-Schüler (Codes werden nur hier einmalig angezeigt) ===');
+    for (const alias of aliases) {
+      const existing = await db.user.findUnique({ where: { alias } });
+      if (existing) {
+        console.log(`- ${alias}: bereits vorhanden (Code unverändert, nicht mehr abrufbar)`);
+        continue;
+      }
+      const code = crypto.randomBytes(5).toString('hex').toUpperCase();
+      await db.user.create({
+        data: {
+          alias,
+          codeLookup: codeLookupHash(code),
+          codeHash: scryptHash(code),
+        },
+      });
+      console.log(`- ${alias}: ${code}`);
     }
-    const code = crypto.randomBytes(5).toString('hex').toUpperCase();
-    await db.user.create({
-      data: {
-        alias,
-        codeLookup: codeLookupHash(code),
-        codeHash: scryptHash(code),
-      },
-    });
-    console.log(`- ${alias}: ${code}`);
+    console.log('=============================================================\n');
+  } else {
+    console.log('[seed] Test-Schüler übersprungen (Produktivmodus; Schüler im Trainer-Bereich anlegen).');
   }
-  console.log('=============================================================\n');
   console.log('[seed] Fertig.');
 }
 

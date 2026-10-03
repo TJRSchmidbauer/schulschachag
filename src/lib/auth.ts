@@ -3,7 +3,10 @@ import { cookies } from 'next/headers';
 import { db } from './db';
 
 export const SESSION_COOKIE = 'ss_session';
-const SESSION_TTL_MS = 12 * 3600 * 1000;
+// Kurzlebige Sitzung für den AG-Betrieb (2 Stunden)
+const SESSION_TTL_MS = 2 * 3600 * 1000;
+// Secure-Cookie nur bei HTTPS (lokaler Betrieb mit http://localhost bleibt möglich)
+const SECURE_COOKIES = (process.env.APP_URL ?? 'https://').startsWith('https://');
 
 export function sha256(input: string) {
   return crypto.createHash('sha256').update(input).digest('hex');
@@ -43,7 +46,7 @@ export async function createSession(userId: string, role: 'STUDENT' | 'TRAINER')
   const store = await cookies();
   store.set(SESSION_COOKIE, token, {
     httpOnly: true,
-    secure: true,
+    secure: SECURE_COOKIES,
     sameSite: 'lax',
     maxAge: SESSION_TTL_MS / 1000,
     path: '/',

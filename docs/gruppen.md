@@ -17,8 +17,8 @@ Mit Gruppen teilst du die AG ein, zum Beispiel in „Anfänger“ und „Fortges
 
 ## Grenzen
 
-- Die Gruppe steuert nur die **Anzeige** der Lernpfade auf der Lernseite. Wer die Adresse eines Moduls aus einem nicht zugeordneten Lernpfad kennt, kann es trotzdem öffnen.
-- Hausaufgaben, freies Üben, Live-Partien und Turniere sind unabhängig von Gruppen. Hausaufgaben vergibst du weiterhin an alle oder an ausgewählte Schüler.
+- Die Gruppe steuert, welche Lernpfade ein Schüler sieht. Der Server prüft das bei jedem Modul nach: Wer die Adresse eines Moduls aus einem nicht zugeordneten Lernpfad kennt, bekommt eine Fehlerseite statt des Inhalts.
+- Hausaufgaben, freies Üben, Live-Partien und Turniere sind bewusst unabhängig von Gruppen. Hausaufgaben vergibst du weiterhin an alle oder an ausgewählte Schüler.
 - Ein Schüler gehört höchstens zu einer Gruppe.
 
 ## Daten

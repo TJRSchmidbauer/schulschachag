@@ -53,8 +53,19 @@ Voraussetzungen: ein Server mit Docker und Portainer, ein Traefik-Reverse-Proxy 
 2. Die Stack-Variablen setzen (siehe Abschnitt „Konfiguration“).
 3. Domain anpassen: In `compose.portainer.yml` steht die Domain in den Traefik-Labels (`Host(...)`). Für deine Version dort deine eigene Domain eintragen.
 4. **Deploy the stack** starten. Beim ersten Start legt der Container die Datenbanktabellen an (`prisma db push`) und führt den Seed aus. Das Bauen des Images dauert einige Minuten, weil auch die Analyse-Engine installiert wird. ☕
-5. Die drei Test-Schülercodes aus dem Seed stehen einmalig im Container-Log (Portainer → Container `schulschach_app` → Logs). Sie dienen nur zum Ausprobieren.
+5. Im Produktivbetrieb legt der Seed **keine** Test-Schüler an und schreibt **keine** Zugangscodes in die Logs. Schüler legst du im Trainer-Bereich an; der Code wird dort einmal angezeigt.
 6. Unter `https://<deine-domain>/trainer` mit dem Trainer-Code anmelden. 🎉
+
+### 💻 Lokal testen ohne Portainer/Traefik
+
+Zum Ausprobieren auf dem eigenen Rechner genügt Docker; es ist kein Reverse-Proxy nötig:
+
+```bash
+cp .env.example .env   # APP_URL=http://localhost:3000 und die restlichen Werte eintragen
+docker compose -f compose.local.yml up -d --build
+```
+
+Die App läuft danach unter `http://localhost:3000`. Die lokalen Test-Schülercodes stehen einmalig im Log: `docker logs schulschach_app`. Beim lokalen Betrieb über `http://` wird das Anmelde-Cookie automatisch ohne `Secure`-Flag gesetzt; über `https://` (Produktivbetrieb) bleibt es gesetzt. Die lokale Compose-Datei enthält absichtlich keine Datensicherung und keine Ressourcenlimits.
 
 ### 🔐 Trainer-Code erzeugen
 
@@ -146,7 +157,7 @@ npm run db:seed
 npm run dev
 ```
 
-Hinweis: Das Setzen des Session-Cookies erwartet HTTPS. Lokal ohne HTTPS kann die Anmeldung daher scheitern. Teste in diesem Fall hinter einem lokalen HTTPS-Proxy. Beim Start (`npm run dev`) und beim Build kopiert ein Skript die Analyse-Engine nach `public/engine`.
+Hinweis: Das Session-Cokie bekommt das `Secure`-Flag nur, wenn `APP_URL` mit `https://` beginnt. Für `npm run dev` mit `APP_URL=http://localhost:3000` funktioniert die Anmeldung daher auch ohne HTTPS (für den Produktivbetrieb bitte immer HTTPS verwenden). Beim Start (`npm run dev`) und beim Build kopiert ein Skript die Analyse-Engine nach `public/engine`.
 
 ## 🗂️ Projektstruktur
 
@@ -166,8 +177,8 @@ docs/                   Import-Anleitung, Live-Schach, Turniere, Einstellungen, 
 
 - 🙈 Keine Klarnamen im System: Schüler haben nur Alias und Code. Der Name auf Urkunden wird ausschließlich im Browser eingegeben und nicht gesendet oder gespeichert.
 - 🚫 Keine Tracker, keine externen Schriften oder CDNs im Betrieb. Das Schachbrett und die Zugprüfung laufen im Browser, die endgültige Prüfung erfolgt serverseitig. Die Engine-Analyse läuft im Browser und sendet keine Stellungen an externe Dienste.
-- 🗝️ Codes und Trainer-Code werden mit scrypt gehasht. Schülercodes liegen zusätzlich verschlüsselt (AES-256-GCM), damit der Trainer sie anzeigen kann. Sitzungen laufen über HttpOnly-, Secure- und SameSite-Cookies (12 Stunden).
-- 🛡️ Geschützte Container-Einstellungen: `no-new-privileges`, `cap_drop: ALL`, CPU- und RAM-Limits, Datenbank nur im internen Docker-Netz, TLS über Traefik.
+- 🗝️ Codes und Trainer-Code werden mit scrypt gehasht. Schülercodes liegen zusätzlich verschlüsselt (AES-256-GCM), damit der Trainer sie anzeigen kann; datenschutzärmer wäre es, Codes nur einmal beim Anlegen zu zeigen und danach nur neu auszustellen. Sitzungen laufen über HttpOnly-, Secure- und SameSite-Cookies und enden nach 2 Stunden (das `Secure`-Flag entfällt nur lokal ohne HTTPS). Server-Logs enthalten keine Aliasse, Codes, IP-Adressen oder Header, sondern nur allgemeine technische Ereignisse.
+- 🛡️ Geschützte Container-Einstellungen: `no-new-privileges`, `cap_drop: ALL`, CPU- und RAM-Limits, Datenbank nur im internen Docker-Netz, TLS über Traefik. Die Anmeldung des Trainers ist gegen Ausprobieren gesperrt: nach fünf Fehlversuchen gibt es 15 Minuten Pause (Zähler nur im Arbeitsspeicher, ohne IP oder Protokoll; ein Neustart hebt die Sperre auf).
 - 🗄️ Gespeichert werden Alias, Anmeldezeitpunkt, Lösungsversuche (Ergebnis, Tipps, Fehlversuche, Dauer, Zeitpunkt), Live-Partien (Alias, Züge, Ergebnis, Bedenkzeit), Turniere (Alias, Paarungen, Ergebnisse) und optional die Gruppenzugehörigkeit. Beendete Partien und Turniere werden nach einer einstellbaren Frist (Standard: 90 Tage) automatisch gelöscht. Es gibt keinen Chat. Prüfe mit deiner Schule, ob dafür eine Einwilligung oder eine andere Rechtsgrundlage nötig ist, und ob Eltern informiert werden müssen.
 - 💾 Die automatischen Datensicherungen enthalten diese Daten bis zum Ablauf der Aufbewahrung (7 Tage, 4 Wochen, 3 Monate), auch wenn Inhalte inzwischen gelöscht wurden. Kürze die Fristen in `compose.portainer.yml`, wenn deine Schule das verlangt.
 - 📣 Sicherheitslücken bitte nicht öffentlich melden, sondern über eine private Nachricht an den Repository-Inhaber.

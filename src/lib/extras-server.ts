@@ -10,8 +10,8 @@ export const getExtras = cache(async (): Promise<Extras> => {
     if (!row) return DEFAULT_EXTRAS;
     const parsed = sanitizeExtras(JSON.parse(row.value));
     return parsed.ok ? parsed.value : DEFAULT_EXTRAS;
-  } catch (err) {
-    console.warn('[einstellungen] Standardwerte (extras) werden benutzt:', err instanceof Error ? err.message : err);
+  } catch {
+    console.warn('[einstellungen] Standardwerte (extras) werden benutzt (Datenbank nicht erreichbar oder leer)');
     return DEFAULT_EXTRAS;
   }
 });
