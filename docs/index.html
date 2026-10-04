@@ -199,7 +199,7 @@ footer p{margin:.35rem 0;max-width:34rem}
       <li>Kein Passwort</li>
       <li>Keine Klarnamen</li>
       <li>Keine Tracker, keine CDNs</li>
-      <li>Läuft offline im Schulnetz</li>
+      <li>Keine externen Dienste</li>
       <li>MIT-Lizenz</li>
     </ul>
   </div>
@@ -306,6 +306,13 @@ docker compose -f compose.local.yml up -d --build
         <a class="btn btn-line" href="https://github.com/TJRSchmidbauer/schulschach#-lokal-testen-ohne-portainertreafik">Anleitung öffnen →</a>
       </div>
     </div>
+    <p class="foot-note">
+      <strong>Voraussetzung:</strong> ein Server mit Docker (App + PostgreSQL) – ohne ihn läuft nichts.
+      Vollständig im Browser rechnen nur der Urkunden-Editor (der echte Name wird nie gesendet),
+      das Schachbrett und die Analyse-Engine; alles andere, einschließlich Turnier-Auslosung,
+      Live-Partien und Statistik, braucht den Server. Ohne Internet kommt die App trotzdem aus,
+      denn sie ruft zur Laufzeit keine externen Dienste auf.
+    </p>
     <p class="foot-note">
       Trainer-Code nie im Klartext speichern: <code>npm run hash:trainer -- "DEIN_LANGER_CODE"</code> erzeugt den Hash für die Stack-Variable.
     </p>
