@@ -7,6 +7,8 @@
 > ⚠️ **Jede Person und Einrichtung, die dieses Projekt einsetzt, ist selbst für ihre Version verantwortlich**: für Konfiguration, Betrieb, Sicherheitsupdates, Backups, Datenschutz (zum Beispiel DSGVO, Einwilligungen, Verzeichnis der Verarbeitungstätigkeiten) und die Einhaltung der Regeln der eigenen Schule oder Organisation. Das ist keine Rechtsberatung.
 > 📜 Die Software wird ohne Gewährleistung bereitgestellt (siehe [LICENSE](LICENSE)).
 
+> 🌐 **Kurze Anlaufseite für Interessierte:** <https://tjrschmidbauer.github.io/schulschach/> – moderne Übersicht mit Screenshots, Datenschutz-Kurzfassung und Schnellstart. Die Seite liegt als statische HTML-Datei unter [`docs/index.html`](docs/index.html), wird ohne GitHub Actions direkt aus dem `main`-Branch ausgeliefert (Pages: „Deploy from branch“ → `docs/`) und braucht keine externen Skripte, Schriften oder CDNs.
+
 ## 📋 Inhalt
 
 - ✨ Funktionen
@@ -199,7 +201,7 @@ scripts/                Trainer-Hash, Lichess-Import, Lernpfade bauen, Engine ko
 src/app/                Seiten und API (Schüler, Trainer, Übung, Medaillen, Statistik, Live-Partien, Turniere, Einstellungen, Gruppen)
 src/lib/                Anmeldung, Verschlüsselung, Medaillen, Statistik, Themen, Lernpfade, Live-Logik, Turnier-Logik, Einstellungen, Gruppen
 src/components/         Urkunden-Editor (SVG), Live-Brett und Analyse-Panel
-docs/                   Import-Anleitung, Live-Schach, Turniere, Einstellungen, Gruppen, Datensicherung, Sicherheitsaudit, Quellen und Lizenzen, Screenshots
+docs/                   Landingpage (index.html), Import-Anleitung, Live-Schach, Turniere, Einstellungen, Gruppen, Datensicherung, Sicherheitsaudit, Quellen und Lizenzen, Screenshots
 ```
 
 ## 🔒 Datenschutz und Sicherheit
