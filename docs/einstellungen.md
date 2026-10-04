@@ -39,7 +39,7 @@ Wo in anderen Dokumenten noch „90 Tage“ steht, ist der Standardwert gemeint.
 
 ## Impressum und Datenschutz
 
-Beide Texte werden als Markdown eingegeben und erscheinen über Links in der Fußzeile auf allen Seiten (`/impressum` und `/datenschutz`, auch ohne Anmeldung sichtbar). Ein leeres Feld blendet den jeweiligen Link aus. Über „Vorlage einfügen“ erhältst du ein Gerüst mit Platzhaltern. Die Vorlagen sind keine Rechtsberatung: Trage die Pflichtangaben deiner Einrichtung ein und lass sie bei Bedarf prüfen.
+Beide Texte werden als Markdown eingegeben und erscheinen über Links in der Fußzeile auf allen Seiten (`/impressum` und `/datenschutz`, auch ohne Anmeldung sichtbar). Ein leeres Feld blendet den jeweiligen Link aus. Über „Vorlage einfügen“ erhältst du ein Gerüst mit Platzhaltern. Die Vorlagen sind keine Rechtsberatung: Trage die Pflichtangaben deiner Einrichtung ein und lass sie bei Bedarf prüfen. Welche technischen Schutzmaßnahmen der Text erwähnen kann, steht im [Sicherheitsaudit](sicherheitsaudit.md).
 
 Unterstützte Markdown-Elemente:
 

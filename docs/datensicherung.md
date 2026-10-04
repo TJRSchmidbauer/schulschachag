@@ -40,6 +40,8 @@ docker exec schulschach_db dropdb -U schulschach restoretest
 
 Die Zahl im dritten Befehl sollte zu den Turnieren passen, die du in der Anwendung siehst. Meldet `ls /backups/last` im Container (`docker exec schulschach_pgbackups ls /backups/last`) einen anderen Dateinamen, setze ihn ein. Ein paar Hinweise zu bereits vorhandenen Einträgen sind beim Wiederherstellen normal.
 
+> ✅ Dieser Test wurde am 4. Oktober 2026 im Rahmen des [Sicherheitsaudits](sicherheitsaudit.md) durchgeführt: Dump erzeugt, in einer Testdatenbank eingespielt und den erwarteten Datenbestand (Schüler, Aufgaben, Lernpfade) gegengeprüft. Wiederhole das bei dir regelmäßig selbst.
+
 ### Echte Wiederherstellung
 
 1. App anhalten: `docker stop schulschach_app` (oder in Portainer den Container stoppen), damit nichts in die Datenbank schreibt.

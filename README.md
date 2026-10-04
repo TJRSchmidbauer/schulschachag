@@ -10,12 +10,14 @@
 ## 📋 Inhalt
 
 - ✨ Funktionen
+- 📸 Einblicke
 - 🚀 Schnellstart mit Portainer
 - ⚙️ Konfiguration
 - 🛠️ Betrieb
 - 💻 Lokale Entwicklung
 - 🗂️ Projektstruktur
 - 🔒 Datenschutz und Sicherheit
+- 🔍 Sicherheitsaudit
 - 📖 Fachbegriffe kurz erklärt
 - 📚 Zitation und Quellen
 - 🤝 Eigene Version betreiben
@@ -44,6 +46,33 @@
 - 📜 Urkunden als SVG: Der echte Name wird nur im Browser eingetragen und nie an den Server gesendet
 - ⚙️ Einstellungsseite (Zahnrad, nur für Trainer): Name und Untertitel, Farbschemata, Brettfarben, Begrüßungstext, Funktionsschalter, Medaillen-Schwierigkeit, Urkunden-Vorlage, erlaubte Bedenkzeiten für Live-Partien, Aufbewahrungsfristen sowie Impressum und Datenschutz als Markdown
 - 🗂️ Gruppen mit eigenem Lernpfad, CSV-Import für Schüler und Turnier-Teilnehmer, Alias-Generator für Spitznamen
+
+## 📸 Einblicke
+
+Einblicke in die vier Hauptbereiche der App:
+
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="docs/screenshots/schueler.png" alt="Schülerübersicht mit Alias-Liste, Fortschritt und Code-Verwaltung" width="400">
+      <br><sub><b>Schüler:</b> Alias anlegen, Fortschritt sehen, Code anzeigen oder neu ausstellen</sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="docs/screenshots/uebungen.png" alt="Übungsdatenbank mit Filtern, Brettvorschau und Hausaufgaben" width="400">
+      <br><sub><b>Übungen:</b> Aufgabendatenbank filtern, Brettvorschau, Hausaufgabe freischalten</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="docs/screenshots/live-partien.png" alt="Live-Partien ansetzen mit Bedenkzeit und eigener Startstellung" width="400">
+      <br><sub><b>Live-Partien:</b> Paarung ansetzen, Bedenkzeit wählen, live zusehen und analysieren</sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="docs/screenshots/turniere.png" alt="Turnieranlage im Schweizer System mit Beamer-Ansicht" width="400">
+      <br><sub><b>Turniere:</b> Schweizer System, Auslosung, Rangliste und große Beamer-Ansicht</sub>
+    </td>
+  </tr>
+</table>
 
 ## 🚀 Schnellstart mit Portainer
 
@@ -170,10 +199,12 @@ scripts/                Trainer-Hash, Lichess-Import, Lernpfade bauen, Engine ko
 src/app/                Seiten und API (Schüler, Trainer, Übung, Medaillen, Statistik, Live-Partien, Turniere, Einstellungen, Gruppen)
 src/lib/                Anmeldung, Verschlüsselung, Medaillen, Statistik, Themen, Lernpfade, Live-Logik, Turnier-Logik, Einstellungen, Gruppen
 src/components/         Urkunden-Editor (SVG), Live-Brett und Analyse-Panel
-docs/                   Import-Anleitung, Live-Schach, Turniere, Einstellungen, Gruppen, Datensicherung, Quellen und Lizenzen
+docs/                   Import-Anleitung, Live-Schach, Turniere, Einstellungen, Gruppen, Datensicherung, Sicherheitsaudit, Quellen und Lizenzen, Screenshots
 ```
 
 ## 🔒 Datenschutz und Sicherheit
+
+> 🔍 **Prüfergebnis:** Alle hier genannten Maßnahmen sind im [Sicherheitsaudit](docs/sicherheitsaudit.md) dokumentiert – nach OWASP, BSI-IT-Grundschutz und DSGVO, inklusive Verifikationsnachweis, bewusster Restrisiken und einer Checkliste der offenen Punkte für den Betreiber.
 
 - 🙈 Keine Klarnamen im System: Schüler haben nur Alias und Code. Der Name auf Urkunden wird ausschließlich im Browser eingegeben und nicht gesendet oder gespeichert.
 - 🚫 Keine Tracker, keine externen Schriften oder CDNs im Betrieb. Das Schachbrett und die Zugprüfung laufen im Browser, die endgültige Prüfung erfolgt serverseitig. Die Engine-Analyse läuft im Browser und sendet keine Stellungen an externe Dienste.
@@ -183,6 +214,14 @@ docs/                   Import-Anleitung, Live-Schach, Turniere, Einstellungen, 
 - 🗄️ Gespeichert werden Alias, Anmeldezeitpunkt, Lösungsversuche (Ergebnis, Tipps, Fehlversuche, Dauer, Zeitpunkt), Live-Partien (Alias, Züge, Ergebnis, Bedenkzeit), Turniere (Alias, Paarungen, Ergebnisse) und optional die Gruppenzugehörigkeit. Beendete Partien und Turniere werden nach einer einstellbaren Frist (Standard: 90 Tage) automatisch gelöscht. Es gibt keinen Chat. Prüfe mit deiner Schule, ob dafür eine Einwilligung oder eine andere Rechtsgrundlage nötig ist, und ob Eltern informiert werden müssen.
 - 💾 Die automatischen Datensicherungen enthalten diese Daten bis zum Ablauf der Aufbewahrung (7 Tage, 4 Wochen, 3 Monate), auch wenn Inhalte inzwischen gelöscht wurden. Kürze die Fristen in `compose.portainer.yml`, wenn deine Schule das verlangt.
 - 📣 Sicherheitslücken bitte nicht öffentlich melden, sondern über eine private Nachricht an den Repository-Inhaber.
+
+## 🔍 Sicherheitsaudit
+
+Das vollständige Prüfprotokoll liegt unter [docs/sicherheitsaudit.md](docs/sicherheitsaudit.md). Es enthält:
+
+- ✅ Bewertung nach OWASP Top 10 / ASVS, BSI-IT-Grundschutz und DSGVO – je Bereich mit Umsetzung, Prüfergebnis und Restrisiko,
+- 🧩 eigenen Abschnitt zu Sicherheitsmaßnahmen für Eingabefelder: serverseitige Whitelist-Validierung, Format- und Längenprüfung, kontextabhängige Prüfung, Abweisen statt Umwandeln, keine Eingaben in Logs, Parameterbindung, automatisches Zurücksetzen sensibler Felder und Sperrlogik,
+- 📋 Checkliste der offenen Punkte, die nur der Betreiber erledigen kann (Einwilligung, Verzeichnis der Verarbeitungstätigkeiten, Fristen, Backup-Transport, Updates).
 
 ## 📖 Fachbegriffe kurz erklärt
 
