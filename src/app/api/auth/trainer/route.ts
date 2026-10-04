@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
-import { createSession, scryptVerify } from '@/lib/auth';
+import { createSession, isSafeCodeInput, scryptVerify } from '@/lib/auth';
 
 // Datenschutzfreundliches Rate-Limit: Der Zähler liegt nur im Speicher der
 // laufenden App (kein Fingerprint, keine IP, kein Protokoll). Nach einem
@@ -22,7 +22,8 @@ export async function POST(req: Request) {
   }
 
   const { code } = (await req.json()) as { code?: string };
-  const trimmedCode = (code ?? '').trim();
+  // Formatprüfung vor der Hash-Prüfung: blockt Schadcode und Riesen-Eingaben.
+  const trimmedCode = isSafeCodeInput(code) ? code.trim() : '';
   if (!trimmedCode) {
     return NextResponse.json({ error: 'Code fehlt' }, { status: 400 });
   }

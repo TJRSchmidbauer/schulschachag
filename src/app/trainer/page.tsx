@@ -37,6 +37,8 @@ export default function TrainerLogin() {
             value={code}
             onChange={(e) => setCode(e.target.value)}
             autoComplete="off"
+            maxLength={128}
+            spellCheck={false}
             required
           />
           <button className="btn" type="submit">Anmelden</button>

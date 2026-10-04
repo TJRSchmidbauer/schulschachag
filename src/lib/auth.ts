@@ -33,6 +33,19 @@ export function codeLookupHash(code: string) {
     .digest('hex');
 }
 
+// Eingabeprüfung für Login-Felder: blockt Steuerzeichen und übergroße Eingaben,
+// bevor irgendetwas gehasht oder in der Datenbank gesucht wird.
+export function isSafeCodeInput(input: unknown): input is string {
+  if (typeof input !== 'string') return false;
+  const t = input.trim();
+  return t.length > 0 && t.length <= 128 && !/[\u0000-\u001F]/.test(t);
+}
+
+// Schülercodes sind kurz und alphanumerisch (z. B. "A1B2C3D4E5").
+export function isStudentCodeFormat(input: string): boolean {
+  return /^[A-Za-z0-9]{6,20}$/.test(input.trim());
+}
+
 export async function createSession(userId: string, role: 'STUDENT' | 'TRAINER') {
   const token = crypto.randomBytes(32).toString('base64url');
   await db.session.create({

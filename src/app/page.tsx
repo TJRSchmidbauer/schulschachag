@@ -41,6 +41,8 @@ export default function LoginPage() {
             id="code"
             type="password"
             autoComplete="off"
+            maxLength={20}
+            spellCheck={false}
             value={code}
             onChange={(e) => setCode(e.target.value)}
             placeholder="z. B. A1B2C3D4E5"
